@@ -11,7 +11,10 @@ import { Input } from "./ui/input";
 import { Control } from "react-hook-form";
 import { FormFieldType } from "./forms/PatientForm";
 import React from "react";
-
+import Image from "next/image";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import { E164Number } from 'libphonenumber-js/core'
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;
@@ -28,7 +31,45 @@ interface CustomProps {
 }
 
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
-  return <Input type="text" placeholder="John Doe"></Input>;
+  const { fieldType, iconSrc, iconAlt, placeholder } = props;
+
+  switch (fieldType) {
+    case FormFieldType.INPUT:
+      return (
+        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+          {iconSrc && (
+            <Image
+              src={iconSrc}
+              height={24}
+              width={24}
+              alt={iconAlt || "icon"}
+              className="ml-2"
+            ></Image>
+          )}
+          <FormControl>
+            <Input
+            placeholder={placeholder} 
+          {...field} className="shad-input border-0"
+            ></Input>
+          </FormControl>
+        </div>
+      );
+
+      case FormFieldType.PHONE_INPUT:
+        return (
+          <FormControl>
+            <PhoneInput
+            defaultCountry="US" 
+            placeholder={placeholder}
+            international
+            withCountryCallingCode
+            value={field.value as E164Number | undefined}
+            onChange={field.onChange}
+            className="input-phone"
+            />
+          </FormControl>
+        )
+  }
 };
 
 const CustomFormField = (props: CustomProps) => {
@@ -42,9 +83,10 @@ const CustomFormField = (props: CustomProps) => {
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel>{label}</FormLabel>
           )}
+
           <RenderField field={field} props={props}></RenderField>
 
-          <FormMessage className="shad-error"/>
+          <FormMessage className="shad-error" />
         </FormItem>
       )}
     />

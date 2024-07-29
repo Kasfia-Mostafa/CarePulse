@@ -9,7 +9,6 @@ const Register = async({params:{userId}}:SearchParamProps) => {
 
 
 
-
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">

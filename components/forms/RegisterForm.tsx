@@ -177,13 +177,35 @@ const RegisterForm = ({ user }: { user: User }) => {
           {Doctors.map((doctor) => (
             <SelectItem key={doctor.name} value={doctor.name}>
               <div className="flex cursor-pointer items-center gap-2">
-                <Image src={doctor.image} width={32} height={32} alt={doctor.name} 
-                className='rounded-full border border-dark-500'/>
+                <Image
+                  src={doctor.image}
+                  width={32}
+                  height={32}
+                  alt={doctor.name}
+                  className="rounded-full border border-dark-500"
+                />
+                <p>{doctor.name}</p>
               </div>
-              <p>{doctor.name}</p>
             </SelectItem>
           ))}
         </CustomFormField>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="insuranceProvider"
+            label="Address"
+            placeholder="14 Street New York"
+          />
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="occupation"
+            label="Occupation"
+            placeholder="Lawyer"
+          />
+        </div>
 
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
       </form>

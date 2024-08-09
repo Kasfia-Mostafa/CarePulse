@@ -55,14 +55,17 @@ const AppointmentForm = ({
     let status;
     switch (type) {
       case "schedule":
-        status = "pending";
+        status = "scheduled";
         break;
+      case "cancel":
+        status = "canceled"; 
+        break;
+      default:
+        status = "pending"; 
     }
 
     try {
       if (type === "create" && patientId) {
-        console.log("Im here");
-
         const appointmentData = {
           userId,
           patient: patientId,
@@ -72,18 +75,22 @@ const AppointmentForm = ({
           note: values.note,
           status: status as Status,
         };
+
         const appointment = await createAppointment(appointmentData);
-        console.log(appointment);
 
         if (appointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
           );
+        } else {
+          console.error("Failed to create appointment. No appointment data returned.");
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 

@@ -13,6 +13,7 @@ import { Doctors } from "@/constants";
 import { SelectItem } from "../ui/select";
 import Image from "next/image";
 import { createAppointment } from "@/lib/actions/appointment.action";
+import { Appointment } from "@/types/appwrite.types";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -25,13 +26,17 @@ export enum FormFieldType {
 }
 
 const AppointmentForm = ({
-  userId,
-  patientId,
   type,
+  patientId,
+  userId,
+  appointment,
+  setOpen,
 }: {
   userId: string;
   patientId: string;
   type: "create" | "cancel" | "schedule";
+  appointment?: Appointment;
+  setOpen: (open: boolean) => void;
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -58,10 +63,10 @@ const AppointmentForm = ({
         status = "scheduled";
         break;
       case "cancel":
-        status = "canceled"; 
+        status = "canceled";
         break;
       default:
-        status = "pending"; 
+        status = "pending";
     }
 
     try {
@@ -84,8 +89,23 @@ const AppointmentForm = ({
             `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
           );
         } else {
-          console.error("Failed to create appointment. No appointment data returned.");
+          console.error(
+            "Failed to create appointment. No appointment data returned."
+          );
         }
+      } else {
+        const appointmentToUpdatae = {
+          userId,
+          appointmentId: appointment?.$id,
+          appointment: {
+            primaryPhysician: values?.primaryPhysician,
+            schedule: new Date(values?.schedule),
+            status: status as Status,
+            cancellationReason: values?.cancellationReason,
+          },
+          type
+        };
+        const updatedAppointment = await updateAppointment(Appointment)
       }
     } catch (error) {
       console.error("Error:", error);

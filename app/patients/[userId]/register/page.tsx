@@ -1,10 +1,12 @@
 import RegisterForm from "@/components/forms/RegisterForm";
 import { getUser } from "@/lib/actions/patient.actions";
+import * as Sentry from "@sentry/nextjs";
 import Image from "next/image";
-import Link from "next/link";
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
   const user = await getUser(userId);
+
+  Sentry.metrics.set("user_view_register", user.name);
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -19,9 +21,7 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
           ></Image>
 
           <RegisterForm user={user} />
-          <p className="copyright py-12">
-            © 2024 CarePulse
-          </p>
+          <p className="copyright py-12">© 2024 CarePulse</p>
         </div>
       </section>
       <Image

@@ -1,12 +1,12 @@
 import StatCard from "@/components/StatCard";
-import { columns, Payment } from "@/components/table/columns";
+import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
-import { getResentAppointmentLint } from "@/lib/actions/appointment.action";
+import { getResentAppointmentList } from "@/lib/actions/appointment.action";
 import Image from "next/image";
 import Link from "next/link";
 
 const Admin = async () => {
-  const appointments = await getResentAppointmentLint();
+  const appointments = await getResentAppointmentList();
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">

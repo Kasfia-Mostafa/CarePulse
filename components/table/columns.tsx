@@ -71,13 +71,13 @@ export const columns: ColumnDef<Appointment>[] = [
         <div className="flex gap-1">
           <AppointmentModal
             type="schedule"
-            patientId={data.patient.$id}
+            patientId={data.patient?.$id}
             userId={data.userId}
             appointment={data}
           />
           <AppointmentModal
             type="cancel"
-            patientId={data.patient.$id}
+            patientId={data.patient?.$id}
             userId={data.userId}
             appointment={data}
           />
